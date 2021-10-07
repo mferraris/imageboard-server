@@ -1,5 +1,6 @@
 const { Router, response } = require("express");
 const router = new Router();
+const bcrypt = require("bcrypt");
 
 const User = require("../models").user;
 
@@ -20,10 +21,10 @@ router.post("/addUser", async (request, response, next) => {
     } else {
       const newUser = await User.create({
         email,
-        password,
+        password: bcrypt.hashSync(password, 10),
         fullName,
       });
-      response.json(newUser);
+      response.send(newUser);
     }
   } catch (error) {
     next(error);
@@ -31,3 +32,5 @@ router.post("/addUser", async (request, response, next) => {
 });
 
 module.exports = router;
+
+// id:3 -> easypassword

@@ -12,4 +12,28 @@ router.get("/", async (request, response, next) => {
   }
 });
 
+router.get("/:imageId", async (request, response, next) => {
+  try {
+    const imageId = request.params.imageId;
+    const image = await Image.findByPk(imageId);
+
+    if (!image) {
+      response.status(404).send("Image not found");
+    } else {
+      response.send(image);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/addImage", async (request, response, next) => {
+  try {
+    const newImage = await Image.create(request.body);
+    response.json(newImage);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
